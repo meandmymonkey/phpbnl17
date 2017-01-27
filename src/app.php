@@ -36,7 +36,7 @@ $container['dispatcher'] = function () use ($container) {
             new RequestStack()
         )
     );
-    
+
     return $dispatcher;
 };
 
@@ -49,15 +49,15 @@ $container['kernel'] = function () use ($container) {
         $container['dispatcher'],
         $container['controller_resolver']
     );
-    
+
     return $kernel;
 };
 
 $container['twig'] = function () use ($container) {
     $loader = new Twig_Loader_Filesystem(
-        __DIR__.'/../templates'
+        __DIR__ . '/../templates'
     );
-    
+
     $twig = new Twig_Environment(
         $loader,
         [
@@ -65,29 +65,51 @@ $container['twig'] = function () use ($container) {
             'debug' => true
         ]
     );
-    
+
     return $twig;
 };
 
+$container['db'] = function () use ($container) {
+    return new \PDO(
+        'mysql:host=localhost;dbname=phpbnl17',
+        'root',
+        '',
+        [
+            \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+        ]
+    );
+};
+
 $container['controller.todo_list'] = function () use ($container) {
-    
+
     $twig = $container['twig'];
-    
+
     return function (Request $request) use ($twig) {
         // ... do something
-        
+
         return new Response($twig->render('index.html.twig'));
     };
 };
 
 $container['controller.todo'] = function () use ($container) {
-    
+
     $twig = $container['twig'];
-    
-    return function (Request $request) use ($twig) {
-        // ... load task, pass to template
-        
-        return new Response($twig->render('todo.html.twig'));
+    /** @var PDO $db */
+    $db = $container['db'];
+
+    return function (Request $request) use ($twig, $db) {
+        $query = $db->prepare('SELECT * FROM todo WHERE id = :id');
+        $query->bindParam(':id', $request->attributes->get('id'));
+        $todo = $query->fetch(\PDO::FETCH_ASSOC);
+
+        return new Response(
+            $twig->render(
+                'todo.html.twig',
+                [
+                    'todo' => $todo
+                ]
+            )
+        );
     };
 };
 
@@ -101,7 +123,7 @@ $container['controller.legacy'] = function () use ($container) {
             $request->get('_script'),
             $request
         );
-        
+
         return $response;
     };
 };
