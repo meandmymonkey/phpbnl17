@@ -6,16 +6,23 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LegacyWrapper
 {
-    public function render($requestPath, $legacyScript)
+    private $basePath;
+
+    public function __construct($basePath)
+    {
+        $this->basePath = $basePath;
+    }
+
+    public function render($legacyScript)
     {
         return StreamedResponse::create(
-            function () use ($requestPath, $legacyScript) {
-                $_SERVER['PHP_SELF'] = $requestPath;
-                $_SERVER['SCRIPT_NAME'] = $requestPath;
+            function () use ($legacyScript) {
+                $_SERVER['PHP_SELF'] = $this->basePath.'/'.$legacyScript;
+                $_SERVER['SCRIPT_NAME'] = $legacyScript;
                 $_SERVER['SCRIPT_FILENAME'] = $legacyScript;
-                chdir(dirname($legacyScript));
+                chdir(dirname($this->basePath));
 
-                require $legacyScript;
+                require $this->basePath.'/'.$legacyScript;
             }
         );
     }
