@@ -1,5 +1,9 @@
 {
     "require": {
-        "symfony/debug": "^3.2"
+        "symfony/debug": "^3.2",
+        "symfony/http-foundation": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {"": "src/"}
     }
 }
