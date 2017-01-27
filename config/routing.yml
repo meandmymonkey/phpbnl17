@@ -4,6 +4,11 @@ home:
         _controller: legacy
         _script: list.php
         
+test:
+    path: /test
+    defaults:
+        _controller: todo_list
+        
 todo:
     path: /todo/{id}
     defaults:

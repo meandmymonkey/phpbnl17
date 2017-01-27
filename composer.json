@@ -6,7 +6,8 @@
         "symfony/routing": "^3.2",
         "symfony/config": "^3.2",
         "symfony/yaml": "^3.2",
-        "symfony/http-kernel": "^3.2"
+        "symfony/http-kernel": "^3.2",
+        "twig/twig": "^2.1"
     },
     "autoload": {
         "psr-4": {"": "src/"}

@@ -4,6 +4,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\HttpKernel;
@@ -19,7 +20,7 @@ $container['router'] = function () use ($container) {
         new YamlFileLoader($locator),
         'routing.yml',
         [
-            'cache_dir' => __DIR__ . '/../cache',
+            'cache_dir' => __DIR__ . '/../cache/router',
             'debug' => true
         ]
     );
@@ -50,6 +51,44 @@ $container['kernel'] = function () use ($container) {
     );
     
     return $kernel;
+};
+
+$container['twig'] = function () use ($container) {
+    $loader = new Twig_Loader_Filesystem(
+        __DIR__.'/../templates'
+    );
+    
+    $twig = new Twig_Environment(
+        $loader,
+        [
+            'cache' => __DIR__ . '/../cache/twig',
+            'debug' => true
+        ]
+    );
+    
+    return $twig;
+};
+
+$container['controller.todo_list'] = function () use ($container) {
+    
+    $twig = $container['twig'];
+    
+    return function (Request $request) use ($twig) {
+        // ... do something
+        
+        return new Response($twig->render('index.html.twig'));
+    };
+};
+
+$container['controller.todo'] = function () use ($container) {
+    
+    $twig = $container['twig'];
+    
+    return function (Request $request) use ($twig) {
+        // ... load task, pass to template
+        
+        return new Response($twig->render('todo.html.twig'));
+    };
 };
 
 $container['controller.legacy'] = function () use ($container) {
