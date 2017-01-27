@@ -1,9 +1,11 @@
 home:
     path: /
     defaults:
+        _controller: legacy
         _script: list.php
         
 todo:
     path: /todo
     defaults:
+        _controller: legacy
         _script: todo.php

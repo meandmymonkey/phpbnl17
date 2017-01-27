@@ -2,7 +2,6 @@
 
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
-use Workshop\LegacyWrapper;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../src/app.php';
@@ -14,10 +13,10 @@ $request = Request::createFromGlobals();
 
 $router = $container['router'];
 $attributes = $router->matchRequest($request);
+$request->attributes->add($attributes);
 
-$wrapper = new LegacyWrapper(__DIR__ . '/../legacy');
-$response = $wrapper->render(
-    $attributes['_script']
-);
+$controller = $container['controller.'.$attributes['_controller']];
+
+$response = $controller($request);
 
 $response->send();
