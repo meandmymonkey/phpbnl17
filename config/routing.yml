@@ -1,0 +1,9 @@
+home:
+    path: /
+    defaults:
+        _script: list.php
+        
+todo:
+    path: /todo
+    defaults:
+        _script: todo.php

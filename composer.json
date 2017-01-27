@@ -3,7 +3,9 @@
         "symfony/debug": "^3.2",
         "symfony/http-foundation": "^3.2",
         "pimple/pimple": "^3.0",
-        "symfony/routing": "^3.2"
+        "symfony/routing": "^3.2",
+        "symfony/config": "^3.2",
+        "symfony/yaml": "^3.2"
     },
     "autoload": {
         "psr-4": {"": "src/"}

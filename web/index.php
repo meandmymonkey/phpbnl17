@@ -2,31 +2,20 @@
 
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
 use Workshop\LegacyWrapper;
 
-require_once __DIR__.'/../vendor/autoload.php';  
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/app.php';
 
-Debug::enable(E_ALL & ~E_NOTICE);   
-
-
-$request = Request::createFromGlobals(); 
+Debug::enable(E_ALL & ~E_NOTICE);
 
 
-$routes = new RouteCollection();
-$routes->add('home', new Route('/', ['_script' => 'list.php']));
-$routes->add('home', new Route('/todo', ['_script' => 'todo.php']));
+$request = Request::createFromGlobals();
 
-$context = new RequestContext();
-$context->fromRequest($request);
-$matcher = new UrlMatcher($routes, $context);
+$router = $container['router'];
+$attributes = $router->matchRequest($request);
 
-$attributes = $matcher->match($request->getPathInfo());
-
-$wrapper = new LegacyWrapper(__DIR__.'/../legacy');   
+$wrapper = new LegacyWrapper(__DIR__ . '/../legacy');
 $response = $wrapper->render(
     $attributes['_script']
 );
