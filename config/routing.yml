@@ -5,7 +5,7 @@ home:
         _script: list.php
         
 todo:
-    path: /todo
+    path: /todo/{id}
     defaults:
         _controller: legacy
         _script: todo.php

@@ -3,7 +3,9 @@
 include 'config.php';
 include 'header.php';
 
-$result = $db->query('SELECT * FROM todo WHERE id = '. $_GET['id']);
+$id = $request->attributes->get('id');
+
+$result = $db->query('SELECT * FROM todo WHERE id = '. $id);
 $todo = $result->fetch(\PDO::FETCH_ASSOC);
 
 ?>

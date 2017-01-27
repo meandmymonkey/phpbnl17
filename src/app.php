@@ -52,12 +52,15 @@ $container['kernel'] = function () use ($container) {
     return $kernel;
 };
 
-
 $container['controller.legacy'] = function () use ($container) {
-    return function (Request $request) {
-        $wrapper = new LegacyWrapper(__DIR__ . '/../legacy');
+    return function (Request $request) use ($container) {
+        $wrapper = new LegacyWrapper(
+            __DIR__ . '/../legacy',
+            $container['router']
+        );
         $response = $wrapper->render(
-            $request->get('_script')
+            $request->get('_script'),
+            $request
         );
         
         return $response;

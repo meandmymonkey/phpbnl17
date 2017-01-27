@@ -7,5 +7,5 @@
     </head>
     <body>
         <div id="container">
-          <h1><a href="list.php">My Todos List</a></h1>
+          <h1><a href="<?php echo $router->generate('home'); ?>">My Todos List</a></h1>
           <div id="content">

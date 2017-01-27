@@ -28,7 +28,7 @@ else if ($_GET['action'] == 'delete')
 }
 
 ?>
-<form action="list.php" method="post">
+<form action="<?php echo $router->generate('home'); ?>" method="post">
     <div>
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" size="45"/>
@@ -64,7 +64,7 @@ $count  = current($result->fetch(\PDO::FETCH_ASSOC));
 
             echo '<tr>';
             echo '  <td class="center">'. $todo['id'] .'</td>';
-            echo '  <td><a href="todo.php?id='. $todo['id'] .'">'. $todo['title'] .'</a></td>';
+            echo '  <td><a href="' . $router->generate('todo', ['id' => $todo['id']]).'">'. $todo['title'] .'</a></td>';
             echo '  <td class="center">';
 
             if ($todo['is_done']) {
